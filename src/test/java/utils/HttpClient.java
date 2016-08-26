@@ -2,8 +2,12 @@ package utils;
 
 import com.google.api.client.http.*;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.util.Charsets;
+import com.google.common.io.CharStreams;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class HttpClient {
     private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
@@ -28,5 +32,10 @@ public class HttpClient {
         HttpRequest request = HTTP_REQUEST.buildPostRequest(uri, dataBytes);
 
         return request.execute();
+    }
+
+    private static String responseToString(HttpResponse response) throws IOException {
+        InputStream in = response.getContent();
+        return CharStreams.toString(new InputStreamReader(in, Charsets.UTF_8));
     }
 }
